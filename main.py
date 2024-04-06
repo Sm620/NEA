@@ -662,21 +662,30 @@ def basketPage():
             # Updating currentMoney variable to output correct amount of money remaining after purhchase
             currentMoney = displayMoney()
 
-            # Defining address that client will be connecting to
-            # Server IP and Config
-            serverAddress = ('192.168.0.100', 138)  # Replace with the server machine's IP
-            clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM) # Address family and socket type
-            sendData = "hi"
+            def sendToServer(itemName):
+                # Server configuration
+                serverAddress = ('192.168.0.100', 138)  # Server ip and port 
+                with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as clientSocket: # Address family and socket type
 
-            try:
-                # Connect to the server
-                clientSocket.connect(serverAddress)
-                # Send data to the server
-                clientSocket.sendall(sendData.encode())
-                clientSocket.close()
+                    try:
+                        # Connect to the server
+                        clientSocket.connect(serverAddress)
+                        # Add name of person who ordered
+                        dataToSend = itemName.strip() + name
+                        # Send data to the server
+                        clientSocket.sendall(dataToSend.encode())
+                        print(f"Sent data: {dataToSend}")
+                        clientSocket.close()
+                    
+                    except Exception as e:
+                        print("Error:", str(e))
 
-            except Exception as e:
-                print("Error:", str(e))
+            with open(userBasket, 'r') as csvFile:
+                csvReader = csv.reader(csvFile)
+                next(csvReader) # Skip header
+                for row in csvReader:
+                    itemName = row[0]
+                    sendToServer(itemName) 
 
             # Creating Purchase Frame
             purchaseFrame = customtkinter.CTkFrame(app,
