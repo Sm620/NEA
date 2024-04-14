@@ -92,8 +92,8 @@ def loginPage():
                         recipientEmail = line[2]
 
             # Details to sign into account and send email
-            senderEmail = "orderingsystem531@outlook.com"
-            senderEmailPassword = "Hollow531"
+            senderEmail = "orderingsystem531@example.com"
+            senderEmailPassword = "example"
             body = 'Subject: One Time Passcode .\nDear user, \n\n' + 'Your One Time Passcode is below:' + '\n\n' + randomCodeValue
             # Testing for errors
             try:
